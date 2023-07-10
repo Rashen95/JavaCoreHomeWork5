@@ -30,7 +30,7 @@ public class MainApp {
 
         //Создаем поле
 
-        byte[][] field = {{0, 2, 2}, {1, 3, 2}, {3, 3, 3}};
+        byte[][] field = {{0, 1, 2}, {3, 2, 1}, {0, 1, 3}};
 
         // Шифруем и записываем в файл
 
@@ -44,29 +44,23 @@ public class MainApp {
 
         // Читаем с файла ключ
 
-        byte[] decrypted = new byte[100];
+        byte[] keyForDecrypted = new byte[3];
         try (FileInputStream fin = new FileInputStream("./src/main/java/key.txt")) {
             int i;
+            int index = 0;
             while ((i = fin.read()) != -1) {
-                decrypted[i] = (byte) i;
+                if (i != 0) {
+                    keyForDecrypted[index] = (byte) i;
+                    index++;
+                }
             }
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
 
-        // Парсим ключ
-
-        byte[] keys = new byte[3];
-        int index = 0;
-        for (byte b : decrypted) {
-            if (b != 0) {
-                keys[index] = b;
-                index++;
-            }
-        }
 
         //Вывод дешифрованной записи из файла
         System.out.println("Дешифрованное поле из файла");
-        System.out.println(Arrays.deepToString(Cipher.decrypt(keys)));
+        System.out.println(Arrays.deepToString(Cipher.decrypt(keyForDecrypted)));
     }
 }
